@@ -1,0 +1,33 @@
+<template name="side">
+    <div class="side">
+        <div class="side-navis">
+            {{#each menus}} 
+                {{#if checkRole}} 
+                        {{#if children}}
+                            <div class="side-navi-item _animation">
+                                <div class="side-navi-main">{{name}}</div>
+                                <i class="fa fa-bars _animation"></i>
+                                <div class="side-navi-children ">
+                                    {{#each children}} 
+                                        {{#if checkRole}}
+                                            <a class="side-navi-item _animation" href="{{target}}">
+                                                <div class="side-navi-main">{{name}}</div>
+                                                <i class="fa fa-angle-right _animation"></i>
+                                            </a>
+                                        {{/if}} 
+                                    {{/each }}
+                                </div>
+                            </div>
+                        {{else}} 
+                            {{#if checkRole}}
+                                <a class="side-navi-item _animation" href="{{target}}">
+                                    <div class="side-navi-main">{{name}}</div>
+                                    <i class="fa fa-angle-right _animation"></i>
+                                </a>
+                            {{/if }} 
+                        {{/if }} 
+                {{/if }} 
+            {{/each }}
+        </div>
+    </div>
+</template>
