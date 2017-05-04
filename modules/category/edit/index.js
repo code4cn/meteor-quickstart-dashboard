@@ -36,12 +36,12 @@ Template.categoryEdit.events({
         var category = Category.findOne({ _id: FlowRouter.getQueryParam("id") })
 
 
-        var imgs = uploader.get("thumb");
+  
         Category.update({ _id: FlowRouter.getQueryParam("id") }, {
             $set: {
                 name: $("#name").val(),
                 summary: $("#summary").val(),
-                thumb: imgs.length > 0 ? imgs[0] : "",
+                thumb: uploader.get("thumb"),
             }
         });
 

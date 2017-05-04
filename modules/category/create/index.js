@@ -27,12 +27,12 @@ Template.categoryCreate.events({
            var parentObj = Category.findOne({ _id: FlowRouter.getQueryParam("parent") });
            type = parentObj.type
         }
-        var imgs = uploader.get("thumb");
+   
         var categoryId = Category.insert({
             parent: FlowRouter.getQueryParam("parent"),
             name: $("#name").val(),
             summary: $("#summary").val(),
-            thumb: imgs.length > 0 ? imgs[0] : "",
+            thumb: uploader.get("thumb"),
             type: type,
         });
 

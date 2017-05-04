@@ -1,8 +1,8 @@
 Package.describe({
     name: 'fami:dashboard-framework',
-    version: '0.1.9',
-    summary: 'meteor-Quickstart-dashboard-framework',
-    git: 'https://github.com/code4cn/meteor-Quickstart-dashboard-framework.git',
+    version: '0.2.0',
+    summary: '后台原型用于快速搭建一个项目',
+    git: 'https://github.com/code4cn/meteor-quickstart-dashboard',
     documentation: 'README.md'
 });
 
@@ -41,11 +41,11 @@ Package.on_use(function(api) {
     //依赖的METEOR包
     //引入的文件
     //输出的变量
-    var meteor= new PackageManager();
-    var file= new PackageManager();
+    var meteor = new PackageManager();
+    var file = new PackageManager();
     var vars = new PackageManager();
 
-        /*公共部分*/
+    /*公共部分*/
     meteor.both.merge([
         "ecmascript@0.6.1",
         "reywood:publish-composite@1.3.6",
@@ -89,7 +89,7 @@ Package.on_use(function(api) {
         "./theme/styles.css",
         "./theme/ff-form.less",
         "./theme/button.less",
-        
+
         "./layouts/header/model.js",
         "./layouts/header/head.html",
         "./layouts/header/index.html",
@@ -106,7 +106,7 @@ Package.on_use(function(api) {
 
         "./layouts/side/model.js",
         "./layouts/side/index.html",
-        "./layouts/side/index.css",
+        "./layouts/side/index.less",
         "./layouts/side/index.js",
     ]);
     vars.client.merge(['Menus']);
@@ -149,9 +149,9 @@ Package.on_use(function(api) {
 
     /* qrcode */
     file.client.merge([
-       "./components/qrcode/index.less",
-       "./components/qrcode/index.html",
-       "./components/qrcode/index.js",
+        "./components/qrcode/index.less",
+        "./components/qrcode/index.html",
+        "./components/qrcode/index.js",
     ]);
     vars.client.merge(['qrcode']);
 
@@ -163,21 +163,30 @@ Package.on_use(function(api) {
     ]);
     file.server.merge([
         "./components/region/server.js",
-         "./components/region/method.js",
+        "./components/region/method.js",
     ]);
     vars.server.merge(['_region_server']);
 
 
     /* popup */
     file.client.merge([
-       "./components/popup/index.less",
-       "./components/popup/index.html",
-       "./components/popup/index.js",
+        "./components/popup/index.less",
+        "./components/popup/index.html",
+        "./components/popup/index.js",
     ]);
-     vars.client.merge(['popup']);
+    vars.client.merge(['popup']);
 
 
     /*模块部分*/
+    /*CONFIG*/
+    file.both.merge([
+        "./modules/config/model.js",
+    ]);
+    file.server.merge([
+        "./modules/config/publish.js",
+    ]);
+    vars.both.merge(['Config']);
+
     /*404*/
     file.client.merge([
         "./modules/404/index.html",
@@ -262,7 +271,7 @@ Package.on_use(function(api) {
     file.both.merge([
         "./modules/category/model.js",
     ]);
-    vars.client.merge(['CategoryType',"_category"]);
+    vars.client.merge(['CategoryType', "_category"]);
     vars.server.merge(['_category_server']);
     vars.both.merge(['Category']);
 
@@ -321,6 +330,7 @@ Package.on_use(function(api) {
         "./modules/wechat/robot/method.js",
         "./modules/wechat/robot/publish.js",
         "./modules/wechat/robot/service.js",
+        "./modules/wechat/robot/server.js",
     ]);
     file.both.merge([
         "./modules/wechat/robot/model.js",
@@ -366,7 +376,7 @@ Package.on_use(function(api) {
         "./modules/wechat/active/index.html",
         "./modules/wechat/active/index.js",
 
-         "./modules/wechat/active/create/index.html",
+        "./modules/wechat/active/create/index.html",
         "./modules/wechat/active/create/index.js",
 
         "./modules/wechat/active/edit/index.html",
@@ -389,7 +399,7 @@ Package.on_use(function(api) {
     file.both.merge([
         "./modules/wechat/active/model.js",
     ]);
-    vars.both.merge(['WxActive',"WxActivePictures","WxActiveUsers"]);
+    vars.both.merge(['WxActive', "WxActivePictures", "WxActiveUsers"]);
 
 
     /*wechat.menu*/
@@ -406,13 +416,33 @@ Package.on_use(function(api) {
     file.server.merge([
         "./modules/wechat/menu/method.js",
         "./modules/wechat/menu/publish.js",
+        "./modules/wechat/menu/server.js",
     ]);
     file.both.merge([
         "./modules/wechat/menu/model.js",
     ]);
-    
+
     vars.client.merge(['_wxMenu']);
     vars.both.merge(['WxMenu']);
+
+    /*wechat.others*/
+    file.client.merge([
+        "./modules/wechat/others/menu.js",
+        "./modules/wechat/others/router.js",
+        "./modules/wechat/others/index.less",
+        "./modules/wechat/others/index.html",
+        "./modules/wechat/others/index.js",
+    ]);
+    file.server.merge([
+        "./modules/wechat/others/server.js",
+    ]);
+
+
+    /*admin.tracker*/
+    file.both.merge([
+        "./modules/tracker/model.js",
+    ]);
+    vars.both.merge(['AdminTrack']);
     // console.log("============");
     // console.log(meteor.both);
     // console.log("============");

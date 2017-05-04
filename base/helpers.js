@@ -95,6 +95,9 @@ Template.registerHelper("compare", function(str1, str2) {
     return str1 == str2;
 });
 Template.registerHelper("checkSelect", function(str1, str2) {
+    // console.log("=======checkSelect========")
+    // console.log(str1);
+    // console.log(str2);
      return str1 == str2 ? "selected" : "";
 });
 

@@ -1,63 +1,85 @@
 Meteor.startup(function() {
-   
 
-    if (!Meteor.users.findOne()) {
-        console.log("系统初始化");
+    framework.wechat.on("event:subscribe", function(openid, data) {
 
+        //判断用户是否为关注用户
+        var test = Meteor.users.findOne({ "profile.openid": openid });
+        if (test) {
+            Meteor.users.update({ _id: test._id }, {
+                $set: {
+                    "profile.focus": true,
+                    tmp: false,
+                }
+            });
+            console.log("老用户重新关注：" + openid);
+        } else {
 
+            var initInfo = {
+                email: openid + "@wx.com",
+                password: "123456"
+            }
 
-        var initAdmin = {
-            email: "admin@fami2u.com",
-            password: "123"
+            Accounts.createUser({
+                email: initInfo.email,
+                password: initInfo.password,
+            });
+
+            var account = Accounts.findUserByEmail(initInfo.email);
+
+            Meteor.users.update({ _id: account._id }, {
+                $set: {
+                    profile: {
+                        openid: openid,
+                        focus: true,
+                    },
+                    type: "wechat",
+                    tmp: true,
+                }
+            });
+
+            console.log("新用户关注：" + openid);
         }
 
-        console.log("新建管理员账号:" + initAdmin.email);
-        console.log("账号初始密码:" + initAdmin.password);
+        var config = Config.findOne({ key: "wechat.welcome" })
 
-        Accounts.createUser({
-            email: initAdmin.email,
-            password: initAdmin.password,
-        });
+        if (config && config.value) {
 
-        var account = Accounts.findUserByEmail(initAdmin.email);
-
-        console.log("设置用户权限：GLOBAL_GROUP／admin");
-
-
-        Roles.addUsersToRoles(account._id, ["admin"], Roles.GLOBAL_GROUP);
-
-        console.log("设置用户基本信息：");
-
-        var profile = {
-            avatar: "http://image.fami2u.com/ghost/avatar.jpg",
-            nickname:"系统管理员",
-            balance: 0,
-            point: 0,
-            chennel:"SYSTEM",
-            tel:"",
-        };
-        
-        console.log("默认名称：[profile.nickname]" + profile.nickname);
-        console.log("默认头像：[profile.avatar]" + profile.avatar);
-        console.log("账户余额：[profile.balance]" + profile.balance);
-        console.log("账户积分：[profile.point]" + profile.point);
-        console.log("渠道来源：[profile.channel]" + profile.chennel);
-
-        Meteor.users.update({ _id: account._id }, {
-            $set: {
-                profile: {
-                    avatar: profile.avatar,
-                    balance: profile.balance,
-                    point: profile.point,
-                    channel:profile.channel,
-                    nickname:profile.nickname,
-                },
-                type:"dashboard",
-               
+            return {
+                type: "text",
+                content: config.value
             }
-        });
+        }
 
-    }
+    }, "from account moudle")
 
-    
+    framework.wechat.on("event:unsubscribe", function(openid, data) {
+
+        //判断用户是否为关注用户
+        var test = Meteor.users.findOne({ "profile.openid": openid });
+        if (test) {
+            Meteor.users.update({ _id: test._id }, {
+                $set: {
+                    "profile.focus": false
+                }
+            });
+        }
+        console.log("用户关注：" + openid);
+
+    }, "from account moudle")
+
+    framework.wechat.on("event:LOCATION", function(openid, data) {
+
+        //判断用户是否为关注用户
+        var test = Meteor.users.findOne({ "profile.openid": openid });
+        if (test) {
+            Meteor.users.update({ _id: test._id }, {
+                $set: {
+                    "profile.location": [data.Longitude, data.Latitude],
+                }
+            });
+        }
+        console.log("LOCATION:" + openid);
+
+    }, "from account moudle")
+
 });

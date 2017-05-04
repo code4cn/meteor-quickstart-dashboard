@@ -35,17 +35,27 @@ Template.side.helpers({
 	},
 });
 Template.side.events({
-	"click .side-navi-item":function(event){
+	"click .l1":function(event){
 		var o = $(event.currentTarget);
-		if(!o.hasClass("side-navi-open")){
-			$(".side-navi-children").slideUp();
-			$(".side-navi-item").removeClass("side-navi-open");
-			if(o.find(".side-navi-children")[0]){
-				o.find(".side-navi-children").slideDown(300);
-				o.addClass("side-navi-open");
-			}
+
+		if($(".children-open")[0] != o[0]){
+			$(".children-open").find(".children").slideUp(300);
+			$(".children-open").removeClass("children-open")
 		}
-		
+		if(o.hasClass("children-open")){
+			o.find(".children").slideUp(300);
+			o.removeClass("children-open")
+		}else{
+			o.addClass("children-open");
+			o.find(".children").slideDown(300);
+		}
+	},
+	"click a":function(event){
+		var o = $(event.currentTarget);
+		FlowRouter.go(o.attr("href"));
+		$(".cur-item").removeClass("cur-item");
+		o.addClass("cur-item");
+		return false;
 	},
  
 });

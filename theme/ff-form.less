@@ -2,6 +2,8 @@
 @revers:#ff9900;
 .ff-form {
     padding: 5px 30px;
+    max-width: 980px;
+    margin:0px auto;
     .title {
         font-size: 16px;
         color: @base;
@@ -141,6 +143,23 @@
             }
         }
     }
+
+}
+ .top-btn{
+        display: inline-block;
+        padding:0px 15px;
+        line-height: 35px;
+        font-size:14px;
+        background:#999;
+        // border-radius: 5px;
+        cursor: pointer;
+        i{
+            padding-right: 5px;
+
+        }
+    }
+.top-btn.blue{
+    background:@base;
 }
 @media screen and (max-width: 720px) {
     .ff-form{

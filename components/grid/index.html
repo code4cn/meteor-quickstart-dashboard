@@ -16,6 +16,7 @@
             </tr>
             {{/each }}
         </tbody>
+        {{#if needFoot}}
         <tfoot>
             <tr>
                 <th colspan="{{footerColspan}}">
@@ -47,5 +48,6 @@
                 </th>
             </tr>
         </tfoot>
+        {{/if}}
     </table>
 </template>

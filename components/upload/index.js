@@ -10,12 +10,12 @@ Template.upload.helpers({
         return this.accept ? this.accept : ".jpg,.png,.JPG,.PNG,.jpeg";
     },
     objsIt: function() {
-        // console.log(typeof(this.objs));
+
         if (this.objs) {
             // console.log(this.objs);
             if (typeof(this.objs) == "string") {
                 return [this.objs];
-            } else if (typeof(this.objs) == "array") {
+            } else if (typeof(this.objs) == "object") {
                 return this.objs;
             }
         }
@@ -28,8 +28,13 @@ Template.upload.helpers({
 Template.upload.events({
     "click .upload-thumb-item": function(event) {
         $(event.currentTarget).remove();
+        Template.instance().$(".upload-btn").show();
     },
     "change .upload-btn-file": function(event) {
+        var that = Template.instance();
+        if (!that.data.multiple) {
+            that.$(".upload-btn").hide();
+        }
         var id = this.id;
         var target = event.currentTarget;
         var thumbs = $(target).parent().parent().find(".upload-thumbs");
@@ -92,10 +97,12 @@ Template.upload.events({
                                     .attr("data-src", cdnUrl);
                                 //.css({backgroundImage:"url(" + cdnUrl + "?x-oss-process=image/resize,m_lfit,w_120,limit_0/auto-orient,0/quality,q_52)"})
                                 _uploadObj[id].push(res.cdn + "/" + res.dir + "/" + imgId);
+
                             },
                             error: function(XMLHttpRequest, textStatus, errorThrow) {
                                 toastr.error("图片上传错误:" + rst.origin.imgId);
                                 picItem.remove();
+                                that.$(".upload-btn").show();
                             },
 
                         });
@@ -109,6 +116,7 @@ Template.upload.events({
             .catch(function(err) {
                 // 处理失败会执行
                 toastr.error("图片上传错误", err);
+                that.$(".upload-btn").show();
 
             })
             .always(function() {
@@ -120,12 +128,22 @@ Template.upload.events({
 _uploadObj = {};
 uploader = {
     get: function(id) {
-        var imgs = [];
-        var els = $("#ut_" + id).find(".upload-thumb-item");
-        for (var i = 0; i < els.length; i++) {
-            imgs.push($(els[i]).attr("data-src"));
+
+        if ($("#ut_" + id).attr("multiple") != "multiple") {
+
+            var els = $("#ut_" + id).find(".upload-thumb-item");
+
+            return els[0] ? els.attr("data-src") : "";
+
+        } else {
+            var imgs = [];
+            var els = $("#ut_" + id).find(".upload-thumb-item");
+            for (var i = 0; i < els.length; i++) {
+                imgs.push($(els[i]).attr("data-src"));
+            }
+            return imgs;
         }
-        return imgs;
+
     },
     loaded: function() {
         return $(".upload-thumb-item-ing").size() == 0;
@@ -134,5 +152,9 @@ uploader = {
 Template.upload.onRendered(function() {
     var that = this;
     _uploadObj[this.data.id] = [];
+
+    if (!Template.instance().data.multiple && Template.instance().data.objs ) {
+        Template.instance().$(".upload-btn").hide();
+    }
 
 });

@@ -6,15 +6,34 @@ Template.grid.helpers({
         return Session.get("DATA_" + Template.currentData().id) ? Session.get("DATA_" + Template.currentData().id).rows : [];
     },
     cell: function(data, column) {
+
         //设置data的情况
         if (column.data) {
             var obj = data[column.data];
+
+            //“.”的处理
+
+            if(column.data.indexOf(".")){
+                var keyArr = column.data.split(".");
+                var tmpData = data;
+                for(var i = 0 ; i < keyArr.length ; i++){
+                    tmpData = tmpData ? tmpData[keyArr[i]] : undefined;
+                }
+                obj = tmpData;
+            }
+
             if (typeof obj == "undefined") {
                 return "-";
             } else if (typeof obj.getMonth == "function") {
                 return moment(obj).format(column.format ? column.format : "YYYY/MM/DD HH:mm");
             } else if (column.type == "decimal") {
                 return obj.toFixed(2);
+            } else if (column.type == "money") {
+                return "¥ " + obj.toFixed(2);
+            } else if (column.type == "image") {
+                return "<img height='60px' src='" +obj+ "'/>";
+            } else if (column.select) {
+                return column.select[obj + ""];
             } else {
                 return obj;
             }
@@ -70,6 +89,9 @@ Template.grid.helpers({
     },
     checkWidth:function(column){
         return column.width ? column.width : "auto";
+    },
+    needFoot:function(){
+        return !Template.currentData().nofoot;
     }
 });
 Template.grid.events({

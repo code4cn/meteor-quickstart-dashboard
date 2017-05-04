@@ -1,17 +1,17 @@
 <template name="side">
     <div class="side">
-        <div class="side-navis">
+        <div class="list">
             {{#each menus}} 
                 {{#if checkRole}} 
                         {{#if children}}
-                            <div class="side-navi-item _animation">
-                                <div class="side-navi-main">{{name}}</div>
+                            <div class="item  l1">
+                                <div class="txt _animation">{{name}}</div>
                                 <i class="fa fa-bars _animation"></i>
-                                <div class="side-navi-children ">
+                                <div class="children ">
                                     {{#each children}} 
                                         {{#if checkRole}}
-                                            <a class="side-navi-item _animation" href="{{target}}">
-                                                <div class="side-navi-main">{{name}}</div>
+                                            <a class="item _animation l2" href="{{target}}">
+                                                <div class="txt2 _animation">{{name}}</div>
                                                 <i class="fa fa-angle-right _animation"></i>
                                             </a>
                                         {{/if}} 
@@ -20,8 +20,8 @@
                             </div>
                         {{else}} 
                             {{#if checkRole}}
-                                <a class="side-navi-item _animation" href="{{target}}">
-                                    <div class="side-navi-main">{{name}}</div>
+                                <a class="item l0" href="{{target}}">
+                                    <div class="txt _animation">{{name}}</div>
                                     <i class="fa fa-angle-right _animation"></i>
                                 </a>
                             {{/if }} 
